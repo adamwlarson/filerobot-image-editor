@@ -8,7 +8,7 @@ const StyledToolsBar = styled.div`
   width: fit-content;
   margin: 0 auto;
   max-width: 99.5%;
-  max-height: 170px;
+  max-height: 250px;
 
   [data-phone='true'] & {
     padding: 0;
@@ -88,14 +88,14 @@ const StyledToolsBarItemButtonLabel = styled(Label)(
 const StyledToolsBarItemOptionsWrapper = styled.div`
   position: relative;
   width: 100%;
-  transition: max-height 100ms ease-in-out;
+  transition: max-height 200ms ease-in-out;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   gap: 24px;
 
   ${(props) => `
-      max-height: ${props.hasChildren ? '56px' : 0};
+      max-height: ${props.hasChildren ? '140px' : 0};
       margin: ${props.hasChildren ? '0 auto 8px' : 0};
     `};
 

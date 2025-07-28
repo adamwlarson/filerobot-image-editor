@@ -302,11 +302,34 @@ const config = {
   },
   [TOOLS.TEXT]: {
     text: 'Filerobot...',
-    //   fonts: ['Arial', 'another', { label: 'Tahoma', value: 'Tahoma' }, 'hey-there'], // must be loaded in the website or the user have them on his system
-    //   fontFamily: 'test',
+    fonts: [
+      'Arial',
+      'Helvetica',
+      'Times New Roman',
+      'Courier New',
+      'Verdana',
+      'Georgia',
+      'Palatino',
+      'Garamond',
+      'Bookman',
+      'Trebuchet MS',
+      { label: 'Comic Sans', value: 'Comic Sans MS' },
+      { label: 'Impact', value: 'Impact' },
+      // Web fonts (you'd need to load these first)
+      // { label: 'Roboto', value: 'Roboto' },
+      // { label: 'Open Sans', value: 'Open Sans' },
+    ],
     // onFontChange: (newFontFamily, reRenderCanvasFn) => {
-    //   if (newFontFamily.toLowerCase() === 'sans-serif') {
-    //     //  Load sans-serif font.
+    //   // Example: Load Google Fonts dynamically
+    //   if (['Roboto', 'Open Sans'].includes(newFontFamily)) {
+    //     const link = document.createElement('link');
+    //     link.href = `https://fonts.googleapis.com/css2?family=${newFontFamily.replace(' ', '+')}:wght@300;400;700&display=swap`;
+    //     link.rel = 'stylesheet';
+    //     document.head.appendChild(link);
+    //     
+    //     // Wait a bit for font to load, then re-render
+    //     setTimeout(() => reRenderCanvasFn(), 100);
+    //   } else {
     //     reRenderCanvasFn();
     //   }
     // },

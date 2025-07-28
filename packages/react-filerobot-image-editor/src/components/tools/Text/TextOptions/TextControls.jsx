@@ -1,7 +1,6 @@
 /** External Dependencies */
 import React, { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import MenuItem from '@scaleflex/ui/core/menu-item';
 import FontBold from '@scaleflex/icons/font-bold';
 import FontItalic from '@scaleflex/icons/font-italic';
 
@@ -16,6 +15,11 @@ import {
   StyledFontFamilySelect,
   StyledFontSizeInput,
   StyledToolsWrapper,
+  StyledTextControlsContainer,
+  StyledFontCardsContainer,
+  StyledFontCard,
+  StyledFontPreview,
+  StyledFontLabel,
 } from './TextOptions.styled';
 import {
   textOptionsPopupComponents,
@@ -117,71 +121,79 @@ const TextControls = ({ text, saveText, children }) => {
   }, [textIdOfEditableContent]);
 
   return (
-    <AnnotationOptions
-      className="FIE_text-tool-options"
-      annotation={text}
-      updateAnnotation={saveText}
-      morePoppableOptionsPrepended={!useCloudimage ? TEXT_POPPABLE_OPTIONS : []}
-      moreOptionsPopupComponentsObj={
-        !useCloudimage ? textOptionsPopupComponents : {}
-      }
-      t={t}
-    >
-      {Array.isArray(fonts) && fonts.length > 1 && (
-        <StyledFontFamilySelect
-          className="FIE_text-font-family-option"
-          onChange={changeFontFamily}
-          value={text.fontFamily}
-          placeholder={t('fontFamily')}
+    <StyledTextControlsContainer>
+      <AnnotationOptions
+        className="FIE_text-tool-options"
+        annotation={text}
+        updateAnnotation={saveText}
+        morePoppableOptionsPrepended={!useCloudimage ? TEXT_POPPABLE_OPTIONS : []}
+        moreOptionsPopupComponentsObj={
+          !useCloudimage ? textOptionsPopupComponents : {}
+        }
+        t={t}
+      >
+        <StyledFontSizeInput
+          className="FIE_text-size-option"
+          value={text.fontSize || ''}
+          name="fontSize"
+          onChange={changeTextProps}
+          inputMode="numeric"
+          type="number"
           size="sm"
-        >
-          {/* fontFamily is string or object */}
-          {fonts.map((fontFamily = '') => (
-            <MenuItem
-              className="FIE_text-font-family-item"
-              key={fontFamily.value ?? fontFamily}
-              value={fontFamily.value ?? fontFamily}
-            >
-              {fontFamily.label ?? fontFamily}
-            </MenuItem>
-          ))}
-        </StyledFontFamilySelect>
-      )}
-      <StyledFontSizeInput
-        className="FIE_text-size-option"
-        value={text.fontSize || ''}
-        name="fontSize"
-        onChange={changeTextProps}
-        inputMode="numeric"
-        type="number"
-        size="sm"
-        placeholder={t('size')}
-      />
+          placeholder={t('size')}
+        />
 
-      <StyledToolsWrapper>
-        {!useCloudimage && (
-          <>
-            <StyledIconWrapper
-              className="FIE_text-bold-option"
-              active={(text.fontStyle || '').includes('bold')}
-              onClick={() => changeFontStyle('bold')}
-              watermarkTool
-            >
-              <FontBold size={20} />
-            </StyledIconWrapper>
-            <StyledIconWrapper
-              className="FIE_text-italic-option"
-              active={(text.fontStyle || '').includes('italic')}
-              onClick={() => changeFontStyle('italic')}
-              watermarkTool
-            >
-              <FontItalic size={20} />
-            </StyledIconWrapper>
-          </>
-        )}
-        {children}
-      </StyledToolsWrapper>
-    </AnnotationOptions>
+        <StyledToolsWrapper>
+          {!useCloudimage && (
+            <>
+              <StyledIconWrapper
+                className="FIE_text-bold-option"
+                active={(text.fontStyle || '').includes('bold')}
+                onClick={() => changeFontStyle('bold')}
+                watermarkTool
+              >
+                <FontBold size={20} />
+              </StyledIconWrapper>
+              <StyledIconWrapper
+                className="FIE_text-italic-option"
+                active={(text.fontStyle || '').includes('italic')}
+                onClick={() => changeFontStyle('italic')}
+                watermarkTool
+              >
+                <FontItalic size={20} />
+              </StyledIconWrapper>
+            </>
+          )}
+          {children}
+        </StyledToolsWrapper>
+      </AnnotationOptions>
+      
+      {Array.isArray(fonts) && fonts.length > 1 && (
+        <StyledFontCardsContainer className="FIE_text-font-family-option">
+          {fonts.map((fontFamily = '') => {
+            const fontValue = fontFamily.value ?? fontFamily;
+            const fontLabel = fontFamily.label ?? fontFamily;
+            const isSelected = text.fontFamily === fontValue;
+            
+            return (
+              <StyledFontCard
+                key={fontValue}
+                className="FIE_text-font-family-item"
+                active={isSelected}
+                onClick={() => changeFontFamily(fontValue)}
+              >
+                <StyledFontPreview fontFamily={fontValue}>
+                  Abc
+                </StyledFontPreview>
+                <StyledFontLabel>
+                  {fontLabel}
+                </StyledFontLabel>
+              </StyledFontCard>
+            );
+          })}
+        </StyledFontCardsContainer>
+      )}
+    </StyledTextControlsContainer>
   );
 };
 

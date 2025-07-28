@@ -42,12 +42,7 @@ const DEFAULT_IMAGES_SRCS = [
 ];
 
 const selectedTabs = [
-  TABS.ADJUST,
-  TABS.FINETUNE,
-  TABS.FILTERS,
-  TABS.WATERMARK,
   TABS.ANNOTATE,
-  TABS.RESIZE,
 ];
 
 const IMG_EDITOR_TABS = {
@@ -63,7 +58,8 @@ const pluginConfig = {
   ...config,
   source: 'https://scaleflex.cloudimg.io/v7/demo/river.png',
   tabsIds: selectedTabs,
-  defaultTabId: TABS.ADJUST,
+  excludedTools: ['Image', 'Rect', 'Ellipse', 'Polygon', 'Pen', 'Line', 'Arrow'],
+  defaultTabId: TABS.ANNOTATE,
   defaultToolId: null,
   observePluginContainerSize: true,
   cloudimage: {

@@ -7,6 +7,7 @@ import { ROOT_CONTAINER_CLASS_NAME } from 'utils/constants';
 import Topbar from 'components/Topbar';
 import Tabs from 'components/Tabs';
 import ToolsBar from 'components/ToolsBar';
+import { AVAILABLE_TABS } from 'components/Tabs/Tabs.constants';
 import {
   HIDE_LOADER,
   RESET,
@@ -67,7 +68,17 @@ const App = () => {
     updateStateFnRef,
     noCrossOrigin,
     resetOnImageSourceChange,
+    tabsIds,
   } = config;
+
+  // Calculate if we should show tabs sidebar
+  const chosenTabs = tabsIds?.length > 0 
+    ? AVAILABLE_TABS.filter(tab => tabsIds.includes(tab.id))
+    : AVAILABLE_TABS;
+  const filteredTabs = chosenTabs.filter(
+    ({ hideFn }) => !hideFn || !hideFn({ useCloudimage })
+  );
+  const shouldShowTabsSidebar = filteredTabs.length > 1;
 
   const showTabsDrawer = window.matchMedia('(max-width: 760px)').matches;
 
@@ -326,7 +337,7 @@ const App = () => {
       )}
       {originalImage && feedback.duration !== 0 && (
         <StyledMainContent className="FIE_main-container">
-          {!showCanvasOnly && !showTabsDrawer && (
+          {!showCanvasOnly && !showTabsDrawer && shouldShowTabsSidebar && (
             <StyledTabs className="FIE_tabs">
               <Tabs toggleMainMenu={toggleMainMenu} />
             </StyledTabs>
@@ -334,6 +345,7 @@ const App = () => {
           <StyledCanvasAndTools
             className="FIE_editor-content"
             showTabsDrawer={showTabsDrawer}
+            shouldShowTabsSidebar={shouldShowTabsSidebar}
           >
             <MainCanvas />
             {!showCanvasOnly && <ToolsBar isPhoneScreen={isPhoneScreen} />}

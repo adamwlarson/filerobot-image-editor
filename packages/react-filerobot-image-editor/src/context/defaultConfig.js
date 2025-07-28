@@ -92,6 +92,7 @@ export default {
     componentType: 'slider', // slider | buttons
   },
   tabsIds: [],
+  excludedTools: [],
   defaultTabId: TABS_IDS.ADJUST,
   defaultToolId: TOOLS_IDS.CROP,
   onClose: undefined,

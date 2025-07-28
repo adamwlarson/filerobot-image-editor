@@ -21,15 +21,17 @@ const ToolsBar = ({ isPhoneScreen }) => {
     toolId,
     annotations,
     selectionsIds = [],
-    config: { defaultTabId, defaultToolId, useCloudimage },
+    config: { defaultTabId, defaultToolId, useCloudimage, excludedTools = [] },
   } = useStore();
   const currentTabId = tabId || defaultTabId;
   const currentToolId =
-    toolId || defaultToolId || TABS_TOOLS[currentTabId]?.[0];
+    toolId || 
+    (defaultToolId && !excludedTools.includes(defaultToolId) ? defaultToolId : null) || 
+    (TABS_TOOLS[currentTabId] || []).find(id => !excludedTools.includes(id));
 
   const tabTools = useMemo(
-    () => TABS_TOOLS[currentTabId] || [],
-    [currentTabId],
+    () => (TABS_TOOLS[currentTabId] || []).filter(toolId => !excludedTools.includes(toolId)),
+    [currentTabId, excludedTools],
   );
 
   const selectTool = useCallback((newToolId) => {
@@ -57,7 +59,7 @@ const ToolsBar = ({ isPhoneScreen }) => {
             />
           )
         );
-      }),
+      }).filter(Boolean),
     [tabTools, currentToolId],
   );
 
@@ -96,12 +98,17 @@ const ToolsBar = ({ isPhoneScreen }) => {
     }
   }, []);
 
+  // Don't render toolbar if no tools are available
+  if (!items || items.length === 0) {
+    return null;
+  }
+
   return (
     <StyledToolsBar className="FIE_tools-bar-wrapper">
       <ToolsBarItemOptionsWrapper isPhoneScreen={isPhoneScreen}>
         {ToolOptionsComponent && <ToolOptionsComponent t={t} />}
       </ToolsBarItemOptionsWrapper>
-      {items && (
+      {items.length > 1 && (
         <StyledToolsBarItems
           className="FIE_tools-bar"
           isPhoneScreen={isPhoneScreen}
