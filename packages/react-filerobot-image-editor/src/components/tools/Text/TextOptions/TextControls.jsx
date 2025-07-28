@@ -39,9 +39,12 @@ const TextControls = ({ text, saveText, children }) => {
   const changeTextProps = useCallback(
     (e) => {
       const { name, value, type } = e.target;
+      const newValue = type === 'number' ? restrictNumber(value, 1, 500) : value;
       saveText((latestText) => ({
         id: latestText.id,
-        [name]: type === 'number' ? restrictNumber(value, 1, 500) : value,
+        [name]: newValue,
+        // Force save when text content changes
+        shouldSave: name === 'text' ? true : false,
       }));
     },
     [saveText],

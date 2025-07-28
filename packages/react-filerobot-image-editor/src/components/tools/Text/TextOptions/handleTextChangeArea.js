@@ -7,6 +7,7 @@ let disableTextEditCallback;
 const handleOutsideClick = (e) => {
   if (e.target !== textarea) {
     const textValue = textarea.value;
+    // Copy Enter key behavior: deactivate first, then save
     // eslint-disable-next-line no-use-before-define
     deactivateTextChange();
     editFinishCallback(textValue);
